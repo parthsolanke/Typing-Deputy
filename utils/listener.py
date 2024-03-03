@@ -1,19 +1,22 @@
 from pynput import keyboard
 
 class Listener:
-    def __init__(self):
+    def __init__(self, f1_callback, f2_callback):
         self.ears = keyboard.GlobalHotKeys({
-            "<112>": self.did_press_f1,
-            "<113>": self.did_press_f2
+            "<112>": self.pressed_f1,
+            "<113>": self.pressed_f2
         })
-
-    def did_press_f1(self):
-        return True
-
-    def did_press_f2(self):
-        return True
-
+        self.f1_callback = f1_callback
+        self.f2_callback = f2_callback
+        
+    def pressed_f1(self):
+        self.f1_callback()
+        
+    def pressed_f2(self):
+        self.f2_callback()
+    
     def start(self):
-        with self.ears as ears:
-            ears.join()
-            
+        self.ears.__enter__()
+        self.ears.join()
+
+
